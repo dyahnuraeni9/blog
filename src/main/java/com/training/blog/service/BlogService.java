@@ -1,8 +1,5 @@
 package com.training.blog.service;
 
-import java.util.List;
-
-import com.training.blog.dto.response.ResponseBlogDTO;
 import com.training.blog.model.Blog;
 
 import org.springframework.http.ResponseEntity;

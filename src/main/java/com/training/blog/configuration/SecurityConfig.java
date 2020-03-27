@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       	.and().authorizeRequests().antMatchers("/oauth/token")
       	.permitAll().anyRequest().authenticated()
 		.and()
-		.authorizeRequests().antMatchers(HttpMethod.GET,"/user").hasRole("ADMIN");
+		.authorizeRequests().antMatchers(HttpMethod.GET,"/blog").hasRole("ADMIN");
   	}
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
