@@ -1,12 +1,18 @@
 package com.training.blog.service;
 
 import java.util.List;
-import com.training.blog.data.model.Blog;
+
+import com.training.blog.dto.response.ResponseBlogDTO;
+import com.training.blog.model.Blog;
+
+import org.springframework.http.ResponseEntity;
 
 public interface BlogService {
 
-    public List<Blog> getAll();
+    public ResponseEntity getById(Integer id);
 
-    public Blog saveOrUpdate(Blog blog);
+    public ResponseEntity getAll();
+
+    public ResponseEntity saveOrUpdate(Blog blog);
 
 }

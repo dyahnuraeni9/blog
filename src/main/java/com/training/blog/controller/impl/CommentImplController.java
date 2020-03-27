@@ -3,13 +3,12 @@ package com.training.blog.controller.impl;
 import javax.validation.Valid;
 
 import com.training.blog.controller.CommentController;
-import com.training.blog.data.model.Blog;
-import com.training.blog.data.model.Comment;
-import com.training.blog.data.response.ResponseBaseDTO;
+import com.training.blog.model.Comment;
 import com.training.blog.service.CommentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,15 +18,13 @@ public class CommentImplController implements CommentController {
     private CommentService commentService;
 
     @Override
-    public ResponseEntity saveOrUpdate(@Valid Comment comment) {
-        ResponseBaseDTO<Comment> responseBaseDTO = new ResponseBaseDTO<>();
+    public ResponseEntity saveComment(@Valid @RequestBody Comment comment) {
+        return commentService.saveOrUpdate(comment);
+    }
 
-        Comment comment1 = commentService.saveOrUpdate(comment);
-        responseBaseDTO.setCode(200);
-        responseBaseDTO.setStatus(true);
-        responseBaseDTO.setMessage("success");
-        responseBaseDTO.setData(comment1);
-        return ResponseEntity.ok(responseBaseDTO);
+    @Override
+    public ResponseEntity GetAllComments() {
+        return commentService.getAll();
     }
 
 }

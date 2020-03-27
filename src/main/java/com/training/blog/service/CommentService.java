@@ -1,9 +1,15 @@
 package com.training.blog.service;
 
-import com.training.blog.data.model.Comment;
+import java.util.List;
+
+import com.training.blog.model.Comment;
+
+import org.springframework.http.ResponseEntity;
 
 public interface CommentService {
 
-    public Comment saveOrUpdate(Comment comment);
+    public ResponseEntity getAll();
+
+    public ResponseEntity saveOrUpdate(Comment comment);
 
 }
