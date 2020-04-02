@@ -10,6 +10,9 @@ public interface CommentService {
 
     public ResponseEntity getAll();
 
-    public ResponseEntity saveOrUpdate(Comment comment);
+    public ResponseEntity save(Comment comment);
 
+    public ResponseEntity update(Comment comment, Integer id);
+
+    public ResponseEntity delete(Integer id);
 }

@@ -1,7 +1,5 @@
 package com.training.blog.dto.response;
 
-import com.training.blog.enums.StatusEnum;
-
 import lombok.Data;
 
 @Data

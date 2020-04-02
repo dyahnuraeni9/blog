@@ -16,12 +16,11 @@ public class ResponseBlogDTO {
     private int id;
     private Author author;
     private Categories categories;
-    private int blogTagsId;
-    private Tags tag;
+    private List<Tags> tags;
     private List<Comment> comments;
     private String title;
     private String content;
     private Date createdAt;
-	private Date updatedAt;
+    private Date updatedAt;
  
 }
