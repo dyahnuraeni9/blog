@@ -22,6 +22,8 @@ public interface AuthorService {
 
     public ResponseEntity exportToFile() throws IOException;
 
+    public ResponseEntity getAllAuthors(Integer pageNo, Integer pageSize, String sortBy);
+
     
 
 }

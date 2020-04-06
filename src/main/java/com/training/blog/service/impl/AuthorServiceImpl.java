@@ -2,6 +2,7 @@ package com.training.blog.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,10 @@ import com.training.blog.service.ExcelGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthorImplService implements AuthorService {
+public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorDao AuthorDao;
@@ -115,12 +120,27 @@ public class AuthorImplService implements AuthorService {
         // return IOUtils.toByteArray(in);
         
         HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=customers.xlsx");
+            headers.add("Content-Disposition", "attachment; filename=authors.xlsx");
         
          return ResponseEntity
                       .ok()
                       .headers(headers)
                       .body(new InputStreamResource(in));
+    }
+
+    @Override
+    public ResponseEntity getAllAuthors(Integer pageNo, Integer pageSize, String sortBy) {
+        ResponseBaseDTO<List<Author>> responseBaseDTO = new ResponseBaseDTO<>();
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+ 
+        Page<Author> pagedResult = AuthorDao.findAll(paging);
+         
+        if(pagedResult.hasContent()) {
+            responseBaseDTO = new ResponseBaseDTO<List<Author>>(200, true, "success", pagedResult.getContent());
+        } else {
+            responseBaseDTO = new ResponseBaseDTO<List<Author>>(200, true, "success", new ArrayList<Author>());
+        }
+        return ResponseEntity.ok(responseBaseDTO);
     }
     
 }

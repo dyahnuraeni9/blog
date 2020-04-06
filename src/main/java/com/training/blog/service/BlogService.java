@@ -1,5 +1,7 @@
 package com.training.blog.service;
 
+import java.io.IOException;
+
 import com.training.blog.dto.request.RequestBlogDTO;
 import com.training.blog.model.Blog;
 
@@ -18,6 +20,8 @@ public interface BlogService {
 
     public ResponseEntity delete(Integer id);
 
-    public ResponseEntity saveImage(MultipartFile file, Integer id);
+    //public ResponseEntity saveImage(MultipartFile file, Integer id);
+
+    public ResponseEntity exportToFile(Integer id) throws IOException;
 
 }

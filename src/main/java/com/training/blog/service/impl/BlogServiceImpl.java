@@ -1,11 +1,13 @@
 package com.training.blog.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.training.blog.service.BlogService;
+import com.training.blog.service.DocGenerateService;
 import com.training.blog.dao.AuthorDao;
 import com.training.blog.dao.BlogDao;
 import com.training.blog.dao.BlogTagsDao;
@@ -16,8 +18,7 @@ import com.training.blog.dto.request.RequestBlogDTO;
 import com.training.blog.dto.response.ResponseBaseDTO;
 import com.training.blog.dto.response.ResponseBlogDTO;
 import com.training.blog.dto.response.ResponseUploadFileDTO;
-import com.training.blog.exception.FileStorageException;
-import com.training.blog.mapper.BlogMapper;
+
 import com.training.blog.model.Author;
 import com.training.blog.model.Blog;
 import com.training.blog.model.BlogTags;
@@ -26,6 +27,8 @@ import com.training.blog.model.Comment;
 import com.training.blog.model.Tags;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,10 +36,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import io.micrometer.core.instrument.Tag;
 
 @Service
-public class BlogImplService implements BlogService {
+public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private BlogDao blogDao;
@@ -55,8 +57,6 @@ public class BlogImplService implements BlogService {
 
     @Autowired
     private CommentDao commentDao;
-
-    private BlogMapper blogMapper;
 
     @Override
     public ResponseEntity getAll() {
@@ -276,43 +276,64 @@ public class BlogImplService implements BlogService {
         return ResponseEntity.ok(responseBaseDTO);
     }
 
-    @Override
-    public ResponseEntity saveImage(MultipartFile file, Integer id) {
-        ResponseBaseDTO<ResponseUploadFileDTO> responseBaseDTO = new ResponseBaseDTO<>();
-        ResponseUploadFileDTO responseUploadFileDTO = new ResponseUploadFileDTO();
-        // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    // @Override
+    // public ResponseEntity saveImage(MultipartFile file, Integer id) {
+    //     ResponseBaseDTO<ResponseUploadFileDTO> responseBaseDTO = new ResponseBaseDTO<>();
+    //     ResponseUploadFileDTO responseUploadFileDTO = new ResponseUploadFileDTO();
+    //     // Normalize file name
+    //     String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-        try {
-            // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
-                return null;
-            }
-           Blog blog = blogDao.findById(id).orElse(null);
-           if (blog == null){
-                responseBaseDTO = new ResponseBaseDTO<ResponseUploadFileDTO>(404, false, "blog Not Found", null);
-                return new ResponseEntity<>(responseBaseDTO, HttpStatus.NOT_FOUND);
-            }
-           blog.setImage(file.getBytes());
+    //     try {
+    //         // Check if the file's name contains invalid characters
+    //         if(fileName.contains("..")) {
+    //             return null;
+    //         }
+    //        Blog blog = blogDao.findById(id).orElse(null);
+    //        if (blog == null){
+    //             responseBaseDTO = new ResponseBaseDTO<ResponseUploadFileDTO>(404, false, "blog Not Found", null);
+    //             return new ResponseEntity<>(responseBaseDTO, HttpStatus.NOT_FOUND);
+    //         }
+    //        blog.setImage(file.getBytes());
 
-           blogDao.save(blog);
+    //        blogDao.save(blog);
           
 
-           String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-           .path("/downloadFile/")
-           .path(Integer.toString(blog.getId()))
-           .toUriString();
+    //        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+    //        .path("/downloadFile/")
+    //        .path(fileName)
+    //        .toUriString();
 
-           responseUploadFileDTO.setImageURL(fileDownloadUri);
-           responseUploadFileDTO.setType(file.getContentType());
-           responseUploadFileDTO.setSize(file.getSize());
+    //        responseUploadFileDTO.setImageURL(fileDownloadUri);
+    //        responseUploadFileDTO.setType(file.getContentType());
+    //        responseUploadFileDTO.setSize(file.getSize());
 
-           responseBaseDTO = new ResponseBaseDTO<ResponseUploadFileDTO>(200, true, "success", responseUploadFileDTO);
-           return ResponseEntity.ok(responseBaseDTO);
-        } catch (IOException ex) {
-            responseBaseDTO = new ResponseBaseDTO<ResponseUploadFileDTO>(500, false, "Failed upload image", null);
-                return new ResponseEntity<>(responseBaseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    //        responseBaseDTO = new ResponseBaseDTO<ResponseUploadFileDTO>(200, true, "success", responseUploadFileDTO);
+    //        return ResponseEntity.ok(responseBaseDTO);
+    //     } catch (IOException ex) {
+    //         responseBaseDTO = new ResponseBaseDTO<ResponseUploadFileDTO>(500, false, "Failed upload image", null);
+    //             return new ResponseEntity<>(responseBaseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+
+    @Override
+    public ResponseEntity exportToFile(Integer id) throws IOException {
+        ResponseBaseDTO<Author> responseBaseDTO = new ResponseBaseDTO<>();
+        Blog blog = blogDao.findById(id).orElse(null);
+        
+        ByteArrayInputStream in;
+        try {
+            in = DocGenerateService.writeDoc(blog);
+        } catch (IOException e){
+            responseBaseDTO = new ResponseBaseDTO<Author>(404, false, "Failed export", null);
+            return new ResponseEntity<>(responseBaseDTO, HttpStatus.NOT_FOUND);
         }
+        HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=blog.docx");
+        
+         return ResponseEntity
+                      .ok()
+                      .headers(headers)
+                      .body(new InputStreamResource(in));
     }
     
     

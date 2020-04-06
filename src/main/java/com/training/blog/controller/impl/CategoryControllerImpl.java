@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CategoryImplController implements CategoryController {
+public class CategoryControllerImpl implements CategoryController {
 
     @Autowired
     private CategoryService categoryService;

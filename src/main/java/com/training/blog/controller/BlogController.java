@@ -1,11 +1,14 @@
 package com.training.blog.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.training.blog.dto.request.RequestBlogDTO;
 import com.training.blog.model.Blog;
 
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/api")
@@ -37,4 +41,16 @@ public interface BlogController{
     @PostMapping("/uploadFile/{id}")
     public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id") Integer id);
 
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request);
+
+    
+    @GetMapping("/downloadDoc/blog.docx")
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public ResponseEntity writeToWord(@RequestParam(value = "id") Integer id) throws Exception;
+
+
+
+    
 }

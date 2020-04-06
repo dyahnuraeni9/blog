@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommentImplService implements CommentService {
+public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentDao CommentDao;

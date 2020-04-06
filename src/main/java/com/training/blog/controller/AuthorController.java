@@ -1,6 +1,7 @@
 package com.training.blog.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/api")
 public interface AuthorController{
@@ -34,8 +36,14 @@ public interface AuthorController{
     @DeleteMapping("/author/{id}")
     public ResponseEntity deleteAuthor(@PathVariable("id") Integer id);
 
-    @GetMapping(value = "/download/authors.xlsx")
+    @GetMapping(value = "/download/authors.docx")
     public ResponseEntity<InputStreamResource> excelCustomersReport() throws IOException;
+
+    @GetMapping(value = "/author_pagination")
+    public ResponseEntity<List<Author>> getAllAuthors(
+                        @RequestParam(defaultValue = "0") Integer pageNo, 
+                        @RequestParam(defaultValue = "10") Integer pageSize,
+                        @RequestParam(defaultValue = "id") String sortBy) ;
 
 
 }

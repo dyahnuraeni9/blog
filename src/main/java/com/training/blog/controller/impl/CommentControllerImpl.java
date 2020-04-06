@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CommentImplController implements CommentController {
+public class CommentControllerImpl implements CommentController {
 
     @Autowired
     private CommentService commentService;

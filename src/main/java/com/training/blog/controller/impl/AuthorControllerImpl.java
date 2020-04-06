@@ -12,10 +12,11 @@ import com.training.blog.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class AuthorImplController implements AuthorController {
+public class AuthorControllerImpl implements AuthorController {
 
     @Autowired
     private AuthorService authorService;
@@ -49,6 +50,15 @@ public class AuthorImplController implements AuthorController {
     public ResponseEntity<InputStreamResource> excelCustomersReport() throws IOException {
        return authorService.exportToFile();
         }
+
+    @Override
+    public ResponseEntity<List<Author>> getAllAuthors(@RequestParam(defaultValue = "0") Integer pageNo, 
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "id") String sortBy) {
+           return authorService.getAllAuthors(pageNo, pageSize, sortBy);
+    }
+
+    
 
 
 }
