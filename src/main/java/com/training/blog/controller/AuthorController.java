@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.training.blog.dto.request.RequestUpdatePasswordDTO;
 import com.training.blog.model.Author;
 
 import org.springframework.core.io.InputStreamResource;
@@ -24,6 +25,9 @@ public interface AuthorController{
     @GetMapping("/author/{id}")
     public ResponseEntity getAuthor(@PathVariable("id") Integer id);
 
+    @PutMapping("/author/update_password")
+    public ResponseEntity UpdatePassword(@Valid @RequestBody RequestUpdatePasswordDTO requestUpdatePasswordDTO);
+
     @GetMapping("/author")
     public ResponseEntity getAllAuthors();
     
@@ -36,7 +40,7 @@ public interface AuthorController{
     @DeleteMapping("/author/{id}")
     public ResponseEntity deleteAuthor(@PathVariable("id") Integer id);
 
-    @GetMapping(value = "/download/authors.docx")
+    @GetMapping(value = "/exportToExcel")
     public ResponseEntity<InputStreamResource> excelCustomersReport() throws IOException;
 
     @GetMapping(value = "/author_pagination")

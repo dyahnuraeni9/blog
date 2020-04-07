@@ -100,7 +100,8 @@ public class AuthorServiceImpl implements AuthorService {
             responseBaseDTO = new ResponseBaseDTO<Author>(404, false, "Author Not Found", null);
             return new ResponseEntity<>(responseBaseDTO, HttpStatus.NOT_FOUND);
         }
-        author.setPassword(new BCryptPasswordEncoder().encode(author.getPassword()));
+        author.setPassword(new BCryptPasswordEncoder().encode(password));
+        AuthorDao.save(author);
         responseBaseDTO = new ResponseBaseDTO<Author>(200, true, "success", author);
         return ResponseEntity.ok(responseBaseDTO);
     }

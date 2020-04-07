@@ -32,22 +32,21 @@ public class Author implements Serializable{
     private int id;
 
     @Column(name="first_name", length = 45, nullable = false)
-    @Size(min = 3, max = 45)
-    @NotBlank
+    //@Size(min = 3, max = 45)
     private String firstName;
     
     @Column(name="last_name", length = 45, nullable = false)
-    @Size(min = 3, max = 45)
-    @NotBlank
+    //@Size(min = 3, max = 45)
+    //@NotBlank
     private String lastName;
 
     @Column(name="username", length = 45, nullable = false)
-    @Size(min = 3, max = 45)
-    @NotBlank
+    //@Size(min = 3, max = 45)
+    //@NotBlank
     private String username;
 
     @Column(name="password", length = 150, nullable = false)
-    @NotBlank
+    //@NotBlank
     private String password;
 
     @Column(name="created_at", updatable = false)

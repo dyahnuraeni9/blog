@@ -61,8 +61,7 @@ public class FileStorageService {
                 responseBaseDTO = new ResponseBaseDTO<ResponseUploadFileDTO>(404, false, "blog Not Found", null);
                 return new ResponseEntity<>(responseBaseDTO, HttpStatus.NOT_FOUND);
             }
-           blog.setImage(file.getBytes());
-           blogDao.save(blog);
+           
           
            // Copy file to the target location (Replacing existing file with the same name)
            Path targetLocation = this.fileStorageLocation.resolve(fileName);
@@ -72,6 +71,10 @@ public class FileStorageService {
            .path("/api/downloadFile/")
            .path(fileName)
            .toUriString();
+
+           blog.setImageUrl(fileDownloadUri);
+           blog.setImage(file.getBytes());
+           blogDao.save(blog);
 
            responseUploadFileDTO.setImageURL(fileDownloadUri);
            responseUploadFileDTO.setType(file.getContentType());

@@ -26,7 +26,6 @@ public class ExcelGeneratorService {
         Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
     ){
-      CreationHelper createHelper = workbook.getCreationHelper();
    
       Sheet sheet = workbook.createSheet("Author");
    

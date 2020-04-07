@@ -67,5 +67,8 @@ public class Blog implements Serializable{
     @Column(name="image")
     private byte[] image;
 
+    @Column(name="image_url")
+    private String imageUrl;
+
    
 }

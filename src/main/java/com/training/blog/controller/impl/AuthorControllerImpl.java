@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.training.blog.controller.AuthorController;
+import com.training.blog.dto.request.RequestUpdatePasswordDTO;
 import com.training.blog.model.Author;
 import com.training.blog.service.AuthorService;
 
@@ -48,14 +49,18 @@ public class AuthorControllerImpl implements AuthorController {
 
     @Override
     public ResponseEntity<InputStreamResource> excelCustomersReport() throws IOException {
-       return authorService.exportToFile();
-        }
+        return authorService.exportToFile();
+    }
 
     @Override
-    public ResponseEntity<List<Author>> getAllAuthors(@RequestParam(defaultValue = "0") Integer pageNo, 
-        @RequestParam(defaultValue = "10") Integer pageSize,
-        @RequestParam(defaultValue = "id") String sortBy) {
-           return authorService.getAllAuthors(pageNo, pageSize, sortBy);
+    public ResponseEntity<List<Author>> getAllAuthors(@RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy) {
+        return authorService.getAllAuthors(pageNo, pageSize, sortBy);
+    }
+
+    @Override
+    public ResponseEntity UpdatePassword(@Valid RequestUpdatePasswordDTO requestUpdatePasswordDTO) {
+        return authorService.updatePassword(requestUpdatePasswordDTO.getPassword(), requestUpdatePasswordDTO.getId());
     }
 
     

@@ -45,7 +45,7 @@ public interface BlogController{
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request);
 
     
-    @GetMapping("/downloadDoc/blog.docx")
+    @GetMapping("/downloadDoc")
     @ResponseBody
     @Transactional(readOnly = true)
     public ResponseEntity writeToWord(@RequestParam(value = "id") Integer id) throws Exception;
